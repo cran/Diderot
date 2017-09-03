@@ -846,9 +846,8 @@ heterocitation_authors<-function(gr, infLimitYear, supLimitYear, pub_threshold=0
   
 }
 
-# Calculate p-value based on Monte Carlo runs with random reassignment of node corpus
-# to evaluate significance of heterocitation statistics
-p_value_Dx <- function(gr, labels, infYearLimit, supYearLimit, rep=20) {
+# Monte Carlo runs with random reassignment of node corpus to evaluate significance of heterocitation statistics
+MC_baseline_distribution <- function(gr, labels, infYearLimit, supYearLimit, rep=20) {
   gr_loc<-gr
   res1<-c()
   res2<-c()
@@ -875,6 +874,24 @@ p_value_Dx <- function(gr, labels, infYearLimit, supYearLimit, rep=20) {
   ret<-data.frame(res1, res2, resALL)
   colnames(ret)<-c(paste("Dx",labels[1]),paste("Dx",labels[2]), "Dx ALL")
   ret
+}
+
+significance_Dx <- function(value, control, normality_threshold=0.05) {
+  pv<-NA
+  # Test normality
+  tn<-stats::shapiro.test(control)
+  if (tn$p.value > normality_threshold) {
+    print("Distribution is normal. Performing t-test.")
+    # p-value calculation
+    ttest<-stats::t.test(value-control)
+    print(ttest)
+    pv<-ttest$p.value
+  }
+  # Glass' effect size. 
+  # See Glass, G.V., McGaw, B. and Smith, M.L. (1981) Meta-Analysis in Social Research. London: Sage.
+  glass<-(value-mean(control))/stats::sd(control)
+  print(paste("Glass' effect size:",glass))
+  return(c(pv,glass))
 }
 
 #real_example<-function() {

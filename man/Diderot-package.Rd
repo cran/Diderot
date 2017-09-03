@@ -21,8 +21,8 @@ This package allows to detect and quantify the unification or separation of two 
 \tabular{ll}{
 Package: \tab Diderot\cr
 Type: \tab Package\cr
-Version: \tab 0.1\cr
-Date: \tab 2017-08-04\cr
+Version: \tab 0.11\cr
+Date: \tab 2017-09-03\cr
 License: \tab GPL (>=2)\cr
 }
 A typical flow of use of the package includes the following points.

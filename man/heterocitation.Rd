@@ -35,7 +35,7 @@ Christian Vincenot (christian@vincenot.biz)
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{precompute_heterocitation}}, \code{\link{plot_heterocitation_timeseries}}, \code{\link{heterocitation_authors}}, \code{\link{p_value_Dx}}
+\code{\link{precompute_heterocitation}}, \code{\link{plot_heterocitation_timeseries}}, \code{\link{heterocitation_authors}}, \code{\link{MC_baseline_distribution}}, \code{\link{significance_Dx}}
 }
 \examples{
 \dontshow{
