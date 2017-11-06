@@ -712,6 +712,33 @@ compute_Ji_ranking<-function(gr, labels, infLimitYear, supLimitYear, write_to_gr
   res
 }
 
+# Plot number of authors
+plot_authors_count<-function(db) {
+  tt<-data.frame(db$Authors,db$Year,db$Corpus)
+  colnames(tt)<-c("Authors","Year","Corpus")
+  tt<-splitstackshape::cSplit(tt,"Authors", sep=",", direction="long")
+  data.table::setDF(tt)
+  trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+  tt$Authors<-trim(tt$Authors)
+  tt<-tt[order(tt$Year),]
+  
+  # Total, counting each author at most once per year (i.e. for each year, how many different people authored an ACS publication?)
+  tot<-tapply(tt$Authors,tt$Year, function(X) length(unique(X)))
+  # Total, counting each author only EVER (i.e. for each year, how many new ACS authors have appeared?)
+  tot_cumulative<-tt[!duplicated(tt$Authors),]
+  tot_cumulative<-tapply(tot_cumulative$Authors,tot_cumulative$Year, length)
+  #Very dirty
+  final<-merge(data.frame(dimnames(tot),as.numeric(tot)),data.frame(dimnames(tot_cumulative),as.numeric(tot_cumulative)))
+  colnames(final)<-c("Year","Nb authors","New authors")
+  final$Year<-as.numeric(unlist(levels(final$Year)))
+  plot(final[,1:2], type="b", col="black")
+  points(final[,c(1,3)], type="b", col="gray")
+  legend("topleft",c("Cumulative count","New authors"),
+         col=c("black","gray"),pch=c(1,1), bty="n")
+  return(final)
+}
+
+
 # WARNING: Always use "which" to select nodes!! (Not filtering, which generates errors) 
 compute_modularity<-function(gr, infLimitYear, supLimitYear) {
   selected<-which(V(gr)$Year < supLimitYear & V(gr)$Year >= infLimitYear & !grepl("\\|",V(gr)$Corpus))
@@ -772,7 +799,6 @@ plot_modularity_timeseries<-function(gr_arg, mini=-1, maxi=-1, cesure=-1, window
   plot(bc)
   return(bc)
 }
-
 
 # Use only on precompiled dataset !! 
 heterocitation_authors<-function(gr, infLimitYear, supLimitYear, pub_threshold=0, remove_orphans=F, remove_citations_to_joint_papers=F) {
@@ -895,9 +921,9 @@ significance_Dx <- function(value, control, normality_threshold=0.05) {
 }
 
 #real_example<-function() {
-  # keys<-c("individual-based model|individual based model|individual based\\s*?[;|,]|individual-based\\s*?[;|,]", "agent-based model|agent based model|agent-based\\s*?[;|,]|agent based\\s*?[;|,]") # Includes model/modeling/modelling
-  # labels<-c("IBM","ABM")
-  # db<-create_bibliography(corpora_files=c("IBMmerged.csv","ABMmerged.csv"), labels=labels, keywords=keys)
+#   keys<-c("individual-based model|individual based model|individual based\\s*?[;|,]|individual-based\\s*?[;|,]", "agent-based model|agent based model|agent-based\\s*?[;|,]|agent based\\s*?[;|,]") # Includes model/modeling/modelling
+#   labels<-c("IBM","ABM")
+#   db<-create_bibliography(corpora_files=c("IBMmerged.csv","ABMmerged.csv"), labels=labels, keywords=keys)
   # ### [1] "File IBMmerged.csv contains 3184 records"
   # ### [1] "File ABMmerged.csv contains 9641 records"
   # gr<-build_graph(db=db,small.year.mismatch=T,fine.check.nb.authors=2,attrs=c("Corpus","Year","Authors", "DOI"))

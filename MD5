@@ -1,7 +1,7 @@
-2e7a94cf66a1dd4aa19ac7034f4c0e6d *DESCRIPTION
+7833dcabdaf267933bf13f2fcd33f9a4 *DESCRIPTION
 06a27b73875bbc1370909cbaaf5d9191 *NAMESPACE
-c6b5000ec8965bbaedadf92f81fdafd2 *R/Diderot.R
-0f5b5f6e3b0f0405a18e58ee4413b5a1 *man/Diderot-package.Rd
+bba7a9c9f991e19350919cceeffc7319 *R/Diderot.R
+85afc0643ddeff2a57a72aa98a5400f5 *man/Diderot-package.Rd
 b4d1c15a8f638d1dd848bd5f6ad24367 *man/MC_baseline_distribution.Rd
 eb41373a82648843036b73d565a57bdf *man/build_graph.Rd
 7bd203fa5bdf1ff76234c6791b0c547b *man/compute_BC_ranking.Rd
@@ -11,12 +11,15 @@ ec001145c8e302cefe13f3dc890304d6 *man/compute_Ji.Rd
 34cee38e7e4b1aa850b61966d5756e6d *man/compute_custom_modularity.Rd
 bf0ab030c448b60b517b16c10efe4250 *man/compute_modularity.Rd
 cc93962db4071cad2005ceac6dfda520 *man/create_bibliography.Rd
+14fc0c92315cd22757284f8e53dc727e *man/figures/Diderot.pdf
+baf222d552fa0f48e8eeed53667231c8 *man/figures/Diderot.png
 0718b4fb89a5cd3674cd7e4d2897abbb *man/get_date_from_doi.Rd
 dc84384c8331a339cfc9ab5dedcdc2ae *man/get_reference_title.Rd
 1c27d842f6b053727c52c88ee0d2505e *man/heterocitation.Rd
 8c06bea96428e131ef3f2053fc5de67e *man/heterocitation_authors.Rd
 a5673fc71fdf77d2dcfbbe3ee8d0c39e *man/load_graph.Rd
 b0330d23c7e29632d461f9e293fc213c *man/nb_refs.Rd
+71379a3f1ec460a801c13aa00848d506 *man/plot_authors_count.Rd
 bde8a417b652571128b0d92563fff3a8 *man/plot_heterocitation_timeseries.Rd
 0ac108cda0374cf8d0616c5f73c86c56 *man/plot_modularity_timeseries.Rd
 9365d6a4f65890658afad7e024242976 *man/plot_publication_curve.Rd

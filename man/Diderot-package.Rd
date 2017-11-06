@@ -14,15 +14,22 @@
 \title{
 Bibliographic Network Analysis Package
 }
+
 \description{
+\tabular{c}{
+   \if{html}{\figure{Diderot.png}{options: width="30\%" alt="Figure: Diderot.png"}}
+   \if{latex}{\figure{Diderot.pdf}{options: width=6cm}} \cr
+   \emph{\bold{Denis Diderot} (1713-1784), French philosopher and co-founder of the modern encyclopedia.}
+}
 This package allows to detect and quantify the unification or separation of two bibliographic corpora through the creation of citation networks. This tool can be used to study the spread of concepts across scientific disciplines, or the fusion/fission of scientific communities.  
 }
+
 \details{
 \tabular{ll}{
 Package: \tab Diderot\cr
 Type: \tab Package\cr
-Version: \tab 0.11\cr
-Date: \tab 2017-09-03\cr
+Version: \tab 0.12\cr
+Date: \tab 2017-09-19\cr
 License: \tab GPL (>=2)\cr
 }
 A typical flow of use of the package includes the following points.
