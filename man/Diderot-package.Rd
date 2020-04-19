@@ -28,8 +28,8 @@ This package allows to detect and quantify the unification or separation of two 
 \tabular{ll}{
 Package: \tab Diderot\cr
 Type: \tab Package\cr
-Version: \tab 0.12\cr
-Date: \tab 2017-09-19\cr
+Version: \tab 0.13\cr
+Date: \tab 2020-04-17\cr
 License: \tab GPL (>=2)\cr
 }
 A typical flow of use of the package includes the following points.

@@ -70,5 +70,4 @@ significance_Dx(-0.927, baseline[["Dx ALL"]])
 ### [1] "Glass' effect size: -18.0563442219448"
 }
 }
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+%\keyword{ ~kwd1 }

@@ -3,6 +3,12 @@
 # @2017 Christian Vincenot (christian@vincenot.biz)
 # Released under the GNU General Public License v3. See https://www.gnu.org/licenses/gpl.html
 
+# !!!!!!!!!!!!
+# TODO: Changes to R 4.0.0 changed default value of stringsAsFactors 
+# in data.frame() and read.table() from TRUE to FALSE. 
+# Changed all empty calls to ", stringsAsFactors = TRUE". Double-check if problems occur.
+# !!!!!!!!!!!!
+
 # library(RCurl)
 library(igraph)
 library(stringi)
@@ -189,16 +195,16 @@ nb_refs<-function(db) {
 
 compute_Ji<-function(db, pubtitle, labels, from=-1, to=-1) {
   calculate_jr<-function(list1, list2, from, to) {
-    dat<-data.frame(year=seq(from,to))
-    dat<-merge(dat, data.frame(year=names(list1),as.numeric(list1)), all=T)
-    dat<-merge(dat, data.frame(year=names(list2),as.numeric(list2)), all=T)
+    dat<-data.frame(year=seq(from,to), stringsAsFactors = TRUE)
+    dat<-merge(dat, data.frame(year=names(list1),as.numeric(list1), stringsAsFactors = TRUE), all=T)
+    dat<-merge(dat, data.frame(year=names(list2),as.numeric(list2), stringsAsFactors = TRUE), all=T)
     colnames(dat)<-c("year","list1","list2")
     dat[is.na(dat$list1),"list1"]<-0
     dat[is.na(dat$list2),"list2"]<-0
     dat$list1<-cumsum(dat$list1)
     dat$list2<-cumsum(dat$list2)
     dat$Ji<-pmin(dat$list1, dat$list2)
-    ret<-data.frame(seq(from,to), dat$Ji)
+    ret<-data.frame(seq(from,to), dat$Ji, stringsAsFactors = TRUE)
     colnames(ret)<-c("year", "val")
     ret
   }
@@ -360,7 +366,7 @@ precompute_heterocitation<-function(gr, labels, infLimitYear, supLimitYear) {
   diffT<-0
   sameT1<-sameT2<-diffT1<-diffT2<-nbnodes1<-nbnodes2<-nbnodesall<-0
   results<-data.frame(seq(1,length(attribs)),#get.vertex.attribute(gr, "label"), #get.vertex.attribute(gr, "DOI"), 
-                      years, attribs)#, authors)
+                      years, attribs, stringsAsFactors = TRUE)#, authors)
   for (i in seq(1,length(adjlist))) {
     nodeType<-attribs[i]
     nodeYear<-years[i]
@@ -433,7 +439,7 @@ precompute_heterocitation<-function(gr, labels, infLimitYear, supLimitYear) {
   print(paste("Dx ALL / ", labels[1], " / ", labels[2]))
   #allBut1<-((nbnodesall-nbnodes1)/nbnodesall)
   #allBut2<-((nbnodesall-nbnodes2)/nbnodesall)
-  joint<-data.frame(attribs, years)
+  joint<-data.frame(attribs, years, stringsAsFactors = TRUE)
   nbLab1<-0
   nbLab2<-0
   nbLabAll<-0
@@ -553,7 +559,7 @@ plot_heterocitation_timeseries<-function(gr_arg, labels, mini=-1, maxi=-1, cesur
     allBut1<-c(allBut1,ret[7])
     allBut2<-c(allBut2,ret[8])
   }
-  bc<-data.frame(yr, sx1,sx2,sxALL,dx1,dx2,dxALL)#,allBut1,allBut2)
+  bc<-data.frame(yr, sx1,sx2,sxALL,dx1,dx2,dxALL, stringsAsFactors = TRUE)#,allBut1,allBut2)
   CEX<-2
   par(mfrow=c(1,2), mar=c(5,6,4,2)+0.1,mgp=c(4,1,0))
   plot(yr, sx1, #xaxt="n", ylim=c(0,0.3), 
@@ -578,9 +584,9 @@ plot_publication_curve<-function(gr,labels, k=1) {
   years<-as.numeric(get.vertex.attribute(gr, "Year"))
   print("Plotting publication trend curve")
   print("-------------")
-  IBMCounts<-data.frame(table(years[grepl(labels[1],attribs)]))
-  ABMCounts<-data.frame(table(years[grepl(labels[2],attribs)]))
-  BothCounts<-data.frame(table(years[grepl("Both",attribs)]))
+  IBMCounts<-data.frame(table(years[grepl(labels[1],attribs)]), stringsAsFactors = TRUE)
+  ABMCounts<-data.frame(table(years[grepl(labels[2],attribs)]), stringsAsFactors = TRUE)
+  BothCounts<-data.frame(table(years[grepl("Both",attribs)]), stringsAsFactors = TRUE)
   ABMCounts$Var1<-as.numeric(levels(ABMCounts$Var1))[ABMCounts$Var1]
   IBMCounts$Var1<-as.numeric(levels(IBMCounts$Var1))[IBMCounts$Var1]
   BothCounts$Var1<-as.numeric(levels(BothCounts$Var1))[BothCounts$Var1]
@@ -641,7 +647,7 @@ compute_citation_ranking<-function(gr, labels, write_to_graph=F) {
   attribs<-factor(attribs)
   years<-as.numeric(get.vertex.attribute(gr, "Year"))
   results<-data.frame(get.vertex.attribute(gr, "Authors"), get.vertex.attribute(gr, "title"), #get.vertex.attribute(gr, "DOI"), 
-                      years, Corpus=attribs, Count=degree(gr, mode="in"))
+                      years, Corpus=attribs, Count=degree(gr, mode="in"), stringsAsFactors = TRUE)
   results<-results[order(results$Count, decreasing=T),]
   colnames(results)<-c("Authors","Title","Year","Corpus","Count")
   results
@@ -657,7 +663,7 @@ compute_BC_ranking<-function(gr, labels, write_to_graph=F) {
   attribs<-factor(attribs)
   years<-as.numeric(get.vertex.attribute(gr, "Year"))
   results<-data.frame(get.vertex.attribute(gr, "Authors"), get.vertex.attribute(gr, "title"), #get.vertex.attribute(gr, "DOI"), 
-                      years, Corpus=attribs, BC=betweenness(gr, directed=T))
+                      years, Corpus=attribs, BC=betweenness(gr, directed=T), stringsAsFactors = TRUE)
   results<-results[order(results$BC, decreasing=T),]
   results
 }
@@ -675,7 +681,7 @@ compute_Ji_ranking<-function(gr, labels, infLimitYear, supLimitYear, write_to_gr
   
   
   results<-data.frame(get.vertex.attribute(gr, "Authors"), get.vertex.attribute(gr, "title"), #get.vertex.attribute(gr, "DOI"), 
-                      years, Corpus=attribs)
+                      years, Corpus=attribs, stringsAsFactors = TRUE)
   for (i in seq(1,length(adjlist))) {
     nodeType<-attribs[i]
     nodeYear<-years[i]
@@ -714,7 +720,7 @@ compute_Ji_ranking<-function(gr, labels, infLimitYear, supLimitYear, write_to_gr
 
 # Plot number of authors
 plot_authors_count<-function(db) {
-  tt<-data.frame(db$Authors,db$Year,db$Corpus)
+  tt<-data.frame(db$Authors,db$Year,db$Corpus, stringsAsFactors = TRUE)
   colnames(tt)<-c("Authors","Year","Corpus")
   tt<-splitstackshape::cSplit(tt,"Authors", sep=",", direction="long")
   data.table::setDF(tt)
@@ -728,7 +734,7 @@ plot_authors_count<-function(db) {
   tot_cumulative<-tt[!duplicated(tt$Authors),]
   tot_cumulative<-tapply(tot_cumulative$Authors,tot_cumulative$Year, length)
   #Very dirty
-  final<-merge(data.frame(dimnames(tot),as.numeric(tot)),data.frame(dimnames(tot_cumulative),as.numeric(tot_cumulative)))
+  final<-merge(data.frame(dimnames(tot),as.numeric(tot)),data.frame(dimnames(tot_cumulative),as.numeric(tot_cumulative), stringsAsFactors = TRUE))
   colnames(final)<-c("Year","Nb authors","New authors")
   final$Year<-as.numeric(unlist(levels(final$Year)))
   plot(final[,1:2], type="b", col="black")
@@ -794,7 +800,7 @@ plot_modularity_timeseries<-function(gr_arg, mini=-1, maxi=-1, cesure=-1, window
     yr<-c(yr,i)
     ret<-c(ret, fun(gr,i-(window-1),i+1))
   }
-  bc<-data.frame(yr, ret)
+  bc<-data.frame(yr, ret, stringsAsFactors = TRUE)
   colnames(bc)<-c("Year","Modularity")
   plot(bc)
   return(bc)
@@ -824,7 +830,7 @@ heterocitation_authors<-function(gr, infLimitYear, supLimitYear, pub_threshold=0
   
   if (remove_orphans) { sg<-induced.subgraph(gr, which(V(gr)$Year >= infLimitYear & V(gr)$Year < supLimitYear & !is.na(V(gr)$Sx)))
   } else sg<-induced.subgraph(gr, which(V(gr)$Year >= infLimitYear & V(gr)$Year < supLimitYear))
-  tt<-data.frame(Authors=V(sg)$Authors,Year=V(sg)$Year, Corpus=V(sg)$Corpus, Sx=V(sg)$Sx, Dx=V(sg)$Dx)
+  tt<-data.frame(Authors=V(sg)$Authors,Year=V(sg)$Year, Corpus=V(sg)$Corpus, Sx=V(sg)$Sx, Dx=V(sg)$Dx, stringsAsFactors = TRUE)
   tt<-splitstackshape::cSplit(tt,"Authors", sep=",", direction="long")
   data.table::setDF(tt)
   trim <- function (x) gsub("^\\s+|\\s+$", "", x)
@@ -897,7 +903,7 @@ MC_baseline_distribution <- function(gr, labels, infYearLimit, supYearLimit, rep
   hist(res1)
   hist(res2)
   hist(resALL)
-  ret<-data.frame(res1, res2, resALL)
+  ret<-data.frame(res1, res2, resALL, stringsAsFactors = TRUE)
   colnames(ret)<-c(paste("Dx",labels[1]),paste("Dx",labels[2]), "Dx ALL")
   ret
 }

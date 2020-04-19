@@ -41,5 +41,4 @@ get_date_from_doi(doi="10.1016/j.procs.2010.04.250",extract_date_from_doi=TRUE)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+%\keyword{ ~kwd1 }
